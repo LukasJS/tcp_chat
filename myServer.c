@@ -28,84 +28,87 @@
 void recvFromClient(int clientSocket);
 int checkArgs(int argc, char *argv[]);
 void initSetup(uint8_t *packet, int clientSocket);
-void checkNewClient(int serverSocket, int *numSocket, fd_set* temp_sock_set);
-void serviceClients(int serverSocket);
+void checkNewClient(fd_set* temp_sock_set);
+void serviceClients(void);
 int getSockNum(uint8_t* handle, uint8_t d_handLen);
+void serverListen(void);
 
 /* Global Variables */
 int numHandles = 0;
+int serverSocket = 0;
+int num_client_sockets = 0;
 fd_set socket_set;
 struct handleBuff *client_table;
 
 int main(int argc, char *argv[])
 {
-	int serverSocket = 0;   //socket descriptor for the server socket
 	int portNumber = 0;
 	client_table = (struct handleBuff*) malloc(10*sizeof(struct handleBuff));
 	portNumber = checkArgs(argc, argv);
 	
 	//create the server socket
 	serverSocket = tcpServerSetup(portNumber);
-        serviceClients(serverSocket);
+	
+	//Listen for clients to service
+	serverListen();
+	
+    serviceClients();
 	
 	return 0;
 }
 
 //Checks if there is a new client to accept
 //And accepts it.
-void checkNewClient(int serverSocket, int *numSocket, fd_set* temp_sock_set){
+void checkNewClient(fd_set* temp_sock_set){
    int clientSocket;
+   int debugFlag = 0;
    if(FD_ISSET(serverSocket, temp_sock_set)){
-       if((clientSocket = accept(serverSocket, NULL, NULL)) < 0){
-           perror("Accept call");
-           exit(-1);
-       }
+        clientSocket = tcpAccept(serverSocket, debugFlag); 
+       
+		num_client_sockets++;
 
-       if(clientSocket >= *numSocket){
-           *numSocket = clientSocket + 1;
-       }
-
-       FD_SET(clientSocket, &socket_set);
-       //handle the clients packet
-       recvFromClient(clientSocket);
+        FD_SET(clientSocket, &socket_set);
+        //handle the clients packet
+        recvFromClient(clientSocket);
    }  
 }
 
 //called in main after the server setup
 //loops inside for sending packets
-void serviceClients(int serverSocket){
-    int numSocket;
-    int loopSocket;
+void serviceClients(){
+    int i;
     fd_set temp_sock_set;
     
-    numSocket = serverSocket + 1;
-    FD_SET(serverSocket, &socket_set);
 
-    if(listen(serverSocket, 100) < 0){
-        perror("Listen call");
-        exit(-1);
-    } 
+    FD_SET(serverSocket, &socket_set);
+ 
 
     while(1){
         temp_sock_set = socket_set;
         
-        if(select(numSocket, &temp_sock_set, NULL, NULL, NULL) < 0){
+        if(select(num_client_sockets, &temp_sock_set, NULL, NULL, NULL) < 0){
             perror("Select call");
             exit(-1);
         }
 
         //Check if the server socket needs to add a new client
-        checkNewClient(serverSocket, &numSocket, &temp_sock_set);
+        checkNewClient(&temp_sock_set);
  
-        for(loopSocket = 0; loopSocket < numSocket+1; loopSocket++){
-            if(loopSocket != serverSocket && FD_ISSET(loopSocket, &temp_sock_set)){
-                recvFromClient(loopSocket);
+        for(i = 0; i < num_client_sockets; i++){
+            if(i != serverSocket && FD_ISSET(i, &temp_sock_set)){
+                recvFromClient(i);
             }
         } 
     }
 
 }
 
+void serverListen(){
+	if(listen(serverSocket, 100) < 0){
+        perror("Listen call");
+        exit(-1);
+    }
+}
 
 void errorProcess(uint8_t* handle, uint8_t len, int socketNum){
     uint8_t packet[MAXBUF];
@@ -267,7 +270,7 @@ void exitResponse(int clientSocket){
 //function.
 void recvFromClient(int clientSocket)
 {
-        int flag;
+    int flag;
 	uint8_t buf[MAXBUF];
 	int messageLen = 0; 
 
@@ -277,7 +280,7 @@ void recvFromClient(int clientSocket)
 		perror("recv call");
 		exit(-1);
 	}
-        flag = packetType(buf);
+    flag = packetType(buf);
         if(flag == 1){
             //INIT
             initSetup(buf, clientSocket);
@@ -350,13 +353,13 @@ void initSetup(uint8_t *packet, int clientSocket){
     //Grab handle from packet
     memcpy(&handleLen, packet + sizeof(struct chat_header), sizeof(uint8_t));
     memcpy(client_handle, packet + sizeof(struct chat_header) + 1, handleLen);
+    
     if(checkHandle(client_handle, handleLen) == 1){
         //Check and realloc dynamic table 
-        if((numHandles % 10) == 0){
-            client_table = realloc(client_table, sizeof(struct handleBuff)*(numHandles + 10));
+        if((num_client_sockets % 10) == 0){
+            client_table = realloc(client_table, sizeof(struct handleBuff)*(num_client_sockets + 10));
         }
         memcpy(client_table[clientSocket].h_buff, client_handle, sizeof(uint8_t)*100);
-        numHandles++;
 
         //Send success packet flag = 2
         sendResponse(clientSocket, 2);
