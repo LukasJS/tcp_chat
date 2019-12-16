@@ -147,8 +147,7 @@ void forwardMsg(uint8_t* packet, int s_clientSocket){
 
     memcpy(&cHandLen, packet+off, sizeof(uint8_t));
     off += cHandLen + sizeof(uint8_t);
-    
-    memcpy(&totHandles, packet+off, sizeof(uint8_t));
+        memcpy(&totHandles, packet+off, sizeof(uint8_t));
     off += sizeof(uint8_t);
 
     for(loop = 0; loop < totHandles; loop++){
@@ -185,13 +184,14 @@ int getSockNum(uint8_t* handle, uint8_t d_handLen){
     return -1;
 }
 
-void forwardBrod(uint8_t* buf, int clientSocket, int messageLen){
+void forwardBrod(uint8_t* buf, int clientSocket){
     int i;
     int sent;
-    uint16_t pduLen = messageLen;
-    
-    for(i = 0; i < num_client_sockets; i++){
-        if(i != clientSocket) {
+    uint16_t pduLen = *(buf);
+    uint8_t emptyBlock[100];
+    memset(emptyBlock, 0, 100);
+    for(i = 0; i < 100; i++){
+        if((i != clientSocket) && (client_table[i].h_buff[0] > 20)) {
             sent = send(i, buf, pduLen, 0);
             if(sent < 0){
                 perror("send call");
@@ -211,7 +211,6 @@ void listResponse(int clientSocket){
     head->flag = 11;
     head->pduLen = sizeof(struct chat_header) + sizeof(uint8_t);
 
-    //memcpy(packet, head, sizeof(chat_header));
     memcpy(packet+sizeof(struct chat_header), &numHandles, sizeof(uint8_t));
     sent = send(clientSocket, packet, head->pduLen, 0);
     if(sent < 0){
@@ -220,25 +219,26 @@ void listResponse(int clientSocket){
     }
     
     //Send a packet per handle known
-    for(i = 0; i < num_client_sockets; i++){
+    for(i = 0; i < 100; i++){
         head->flag = 12;
         len = strlen((char*)client_table[i].h_buff);
         head->pduLen = sizeof(struct chat_header) + sizeof(uint8_t) + len;
 
-        //memcpy(packet, head, sizeof(chat_header)); (Maybe need?)
-        memcpy(packet+sizeof(struct chat_header), &len, sizeof(uint8_t));
-        memcpy(packet+sizeof(struct chat_header)+sizeof(uint8_t), client_table[i].h_buff, len);
-        sent = send(clientSocket, packet, head->pduLen, 0);
-        if(sent < 0){
-            perror("send call");
-            exit(-1);
+        if((client_table[i].h_buff[0] > 20)) {
+
+            memcpy(packet+sizeof(struct chat_header), &len, sizeof(uint8_t));
+            memcpy(packet+sizeof(struct chat_header)+sizeof(uint8_t), client_table[i].h_buff, len);
+            sent = send(clientSocket, packet, head->pduLen, 0);
+            if(sent < 0){
+                perror("send call");
+                exit(-1);
+            }
         }
     }
 
     //Send done packet
     head->flag = 13;
     head->pduLen = sizeof(struct chat_header);
-    memcpy(packet, head, sizeof(struct chat_header));
     sent = send(clientSocket, packet, head->pduLen, 0);
     if(sent < 0){
         perror("send call");
@@ -286,7 +286,7 @@ void recvFromClient(int clientSocket)
             initSetup(buf, clientSocket);
         } else if(flag == 4){
             //Broadcast
-            forwardBrod(buf, clientSocket, messageLen);
+            forwardBrod(buf, clientSocket);
         }else if(flag == 5){
             //Message
             forwardMsg(buf, clientSocket);
