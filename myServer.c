@@ -69,7 +69,7 @@ void checkNewClient(fd_set* temp_sock_set){
 
         FD_SET(clientSocket, &socket_set);
         //handle the clients packet
-        recvFromClient(clientSocket);
+        //recvFromClient(clientSocket);
    }  
 }
 
@@ -279,10 +279,12 @@ void recvFromClient(int clientSocket)
 	{
 		perror("recv call");
 		exit(-1);
-	}
+    }
+    printf("Recieved Packet socket num:%d\n", clientSocket);
     flag = packetType(buf);
         if(flag == 1){
             //INIT
+            printf("INIT packet caught\n");
             initSetup(buf, clientSocket);
         } else if(flag == 4){
             //Broadcast
