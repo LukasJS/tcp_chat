@@ -34,6 +34,7 @@ int getSockNum(uint8_t* handle, uint8_t d_handLen);
 void sendListAmount(int clientSocket);
 void sendListDone(int clientSocket);
 void sendListHandles(int clientSocket, int index, uint8_t* clientHandle);
+void initTable(void);
 
 /* Global Variables */
 int numHandles = 0;
@@ -46,6 +47,7 @@ int main(int argc, char *argv[])
 	int serverSocket = 0;   //socket descriptor for the server socket
 	int portNumber = 0;
 	client_table = (struct handleBuff*) malloc(10*sizeof(struct handleBuff));
+	initTable();
 	portNumber = checkArgs(argc, argv);
 
 	//create the server socket
@@ -55,6 +57,12 @@ int main(int argc, char *argv[])
 	return 0;
 }
 
+void initTable(){
+		int i;
+		for(i = 0; i < 100; i++)}
+			memset(client_table[i].h_buff, 0, 100);
+		}
+}
 //Checks if there is a new client to accept
 //And accepts it.
 void checkNewClient(int serverSocket, int *numSocket, fd_set* temp_sock_set){
@@ -64,7 +72,7 @@ void checkNewClient(int serverSocket, int *numSocket, fd_set* temp_sock_set){
            perror("Accept call");
            exit(-1);
        }
-
+			 printf("ClientSocket: %d\n", clientSocket);
        if(clientSocket >= *numSocket){
            *numSocket = clientSocket + 1;
        }
