@@ -368,7 +368,7 @@ void recvFromClient(int clientSocket)
 				perror("recv call");
 				exit(-1);
 		}
-		printf("Message Len Recieved: %d\n", messageLen);
+		//printf("Message Len Recieved: %d\n", messageLen);
 		if(messageLen == 0) {
 				exitClient(clientSocket);
 		} else {
