@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
 
 void initTable(){
 		int i;
-		for(i = 0; i < 100; i++)}
+		for(i = 0; i < 100; i++){
 			memset(client_table[i].h_buff, 0, 100);
 		}
 }
