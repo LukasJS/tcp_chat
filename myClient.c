@@ -233,6 +233,7 @@ void printListPackets(int socketNum){
         recv(socketNum, packet, MAXBUF, 0);
         flag = *(packet+sizeof(uint16_t));
         handLen = *(packet+sizeof(struct chat_header));
+        printf("%d %.*s\n", count, handLen, packet+4);
         if(flag == 12){
             printf(" %.*s\n", handLen, packet+4);
         }
