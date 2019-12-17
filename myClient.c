@@ -514,8 +514,9 @@ int recvFromServer(int socketNum, uint8_t *buffer){
 
 void sendToServer(int socketNum, uint8_t* packet, int sendLen)
 {
-        int sent;
+  int sent;
 	sent =  send(socketNum, packet, sendLen, 0);
+  printf("Sent from Client: %d\n", sent);
 	if (sent < 0)
 	{
 		perror("send call");
