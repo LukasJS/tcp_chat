@@ -35,6 +35,7 @@ void sendListAmount(int clientSocket);
 void sendListDone(int clientSocket);
 void sendListHandles(int clientSocket, int index, uint8_t* clientHandle);
 void initTable(void);
+void exitClient(int clientSocket);
 
 /* Global Variables */
 int numHandles = 0;
@@ -332,12 +333,11 @@ void exitResponse(int clientSocket){
     uint8_t packet[MAXBUF];
     int sent;
     struct chat_header *head = (struct chat_header*)packet;
-    numHandles--;
 
     head->flag = 9;
     head->pduLen = sizeof(struct chat_header);
 
-    memcpy(client_table[clientSocket].h_buff, "\0", 100);
+    //memcpy(client_table[clientSocket].h_buff, "\0", 100);
     sent = send(clientSocket, packet, sizeof(struct chat_header), 0);
     if(sent < 0){
         perror("good packet send call");
@@ -347,20 +347,29 @@ void exitResponse(int clientSocket){
 
 }
 
+void exitClient(int clientSocket){
+		memset(client_table[clientSocket].h_buff, 0, 100);
+		numHandles--;
+}
+
 //grabs the packet then checks the flag and calls appropriate
 //function.
 void recvFromClient(int clientSocket)
 {
-        int flag;
-	uint8_t buf[MAXBUF];
-	int messageLen = 0;
 
-	//now get the data from the client socket
-	if ((messageLen = recv(clientSocket, buf, MAXBUF, 0)) < 0)
-	{
-		perror("recv call");
-		exit(-1);
-	}
+		int flag;
+		uint8_t buf[MAXBUF];
+		int messageLen = 0;
+
+		//now get the data from the client socket
+		if ((messageLen = recv(clientSocket, buf, MAXBUF, 0)) < 0)
+		{
+				perror("recv call");
+				exit(-1);
+		}
+		if(messageLen == 0) {
+				exitClient(clientSocket);
+		} else {
         flag = packetType(buf);
         if(flag == 1){
             //INIT
@@ -379,9 +388,9 @@ void recvFromClient(int clientSocket)
             listResponse(clientSocket);
         } else {
             //Disconnect the client
-
-            return;
+						return;
         }
+		}
 }
 
 int checkArgs(int argc, char *argv[])
