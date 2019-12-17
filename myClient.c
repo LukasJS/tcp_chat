@@ -435,7 +435,7 @@ void getPacket(int socketNum){
         //Error Packet recieved
         rcvError(packet);
     } else if(head->flag == 11){
-        printListPackets(packet);
+        printListPackets(socketNum, packet);
     } else {
         printf("Server Terminated\n");
     }
