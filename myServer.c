@@ -222,7 +222,7 @@ void sendListHandles(int clientSocket, int index, uint8_t* clientHandle){
 
 		struct chat_header *head = (struct chat_header*)packet;
 		head->flag = 12;
-		handleLen = (uint8_t) strlen((char*)handle);
+		handleLen = (uint8_t) strlen(handle);
 		printf("List Handle Len: %d\n", handleLen);
 		head->pduLen = sizeof(struct chat_header) + sizeof(uint8_t) + handleLen;
 
@@ -417,10 +417,11 @@ void sendResponse(int clientSocket, int flag){
 void initSetup(uint8_t *packet, int clientSocket){
     uint8_t handleLen = 100;
     uint8_t client_handle[100];
-
+		memset(client_handle, 0, 100);
     //Grab handle from packet
     memcpy(&handleLen, packet + sizeof(struct chat_header), sizeof(uint8_t));
     memcpy(client_handle, packet + sizeof(struct chat_header) + 1, handleLen);
+
     if(checkHandle(client_handle, handleLen) == 1){
         //Check and realloc dynamic table
         if((numHandles % 10) == 0){
