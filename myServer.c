@@ -209,6 +209,7 @@ void listResponse(int clientSocket){
 		sendListAmount(clientSocket);
 
 		for(index = 0; index < maxClientSocket; index++){
+			printf("List Handle: %s\n", client_table[index].h_buff);
 			sendListHandles(clientSocket, index, client_table[index].h_buff);
 		}
 		sendListDone(clientSocket);
@@ -223,7 +224,7 @@ void sendListHandles(int clientSocket, int index, uint8_t* clientHandle){
 		head->flag = 12;
 		handleLen = strlen((char*)client_table[index].h_buff);
 		printf("List Handle Len: %d\n", handleLen);
-		printf("List Handle: %s\n", clientHandle);
+
 		head->pduLen = sizeof(struct chat_header) + sizeof(uint8_t) + handleLen;
 
 		memcpy(packet+sizeof(struct chat_header), &handleLen, sizeof(uint8_t));
