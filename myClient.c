@@ -42,9 +42,9 @@ uint8_t messagePacket(uint16_t pduLen, uint8_t totHandles, uint8_t* handLengths,
 
 int main(int argc, char * argv[])
 {
-        char *handle = argv[1];
+  char *handle = argv[1];
 	int socketNum = 0;         //socket descriptor
-	
+
 	checkArgs(argc, argv);
 
 	/* set up the TCP Client socket  */
@@ -53,9 +53,9 @@ int main(int argc, char * argv[])
 	initProcess(socketNum, handle);
 	//Get user input and send the appropriate packet
 	userInput(socketNum, handle);
-	
+
 	close(socketNum);
-	
+
 	return 0;
 }
 
@@ -78,7 +78,7 @@ uint8_t makeHandArr(uint8_t* totHandles, uint8_t* handLengths, char** handlesArr
        handlesArr[0] = token;
        dataLen = handLengths[0] + sizeof(uint8_t);
        return dataLen;
-    } 
+    }
     for(countHandles = 0; countHandles < *totHandles; countHandles++){
         token = strtok(NULL, " ");
         //Handle string
@@ -113,7 +113,7 @@ void messageProcess(int socketNum, char* input, char* handle){
     //Keep track of pdu length as we add data.
     pduLen += sizeof(uint8_t);
     pduLen += c_handLen;
-   
+
     token = parseInput(input);
     totHandles = atoi(token);
     pduLen += sizeof(uint8_t);
@@ -136,8 +136,8 @@ void messageProcess(int socketNum, char* input, char* handle){
     }
     pduLen += strlen(txt);
     offset = messagePacket(pduLen, totHandles, handLengths, handlesArr, token, handle, packet);
-   
-     
+
+
     memcpy(packet+offset, txt, strlen(txt));
     sendToServer(socketNum, packet, pduLen);
 }
@@ -175,7 +175,7 @@ uint8_t messagePacket(uint16_t pduLen, uint8_t totHandles, uint8_t* handLengths,
     offset+=1;
     //Loops through handles and adds length and string of handles.
     inputDestHandle(packet, &offset, totHandles, handLengths, handlesArr);
-     
+
     return offset;
 }
 
@@ -186,7 +186,7 @@ void broadProcess(int socketNum, char* input, char* handle){
     uint16_t off = 0;
     uint16_t pduLen;
     uint8_t flag = 4;
-    
+
     uint8_t c_handLen = strlen(handle);
     off+= sizeof(struct chat_header);
 
@@ -212,12 +212,15 @@ void printListPackets(int socketNum){
     uint8_t flag = 0;
     uint16_t numHandles;
     uint8_t handLen;
+    int i = 0;
 
     recvFromServer(socketNum, packet);
+    numHandles = *(packet+sizeof(struct chat_header));
     flag = *(packet+sizeof(uint16_t));
-    while(flag != 11){
-        recvFromServer(socketNum, packet);
-        flag = *(packet+sizeof(uint16_t));
+    while(i < numHandles){
+        recv(socketNum, packet, MAXBUF, MSG_WAITALL);
+        //flag = *(packet+sizeof(uint16_t));
+        i++
     }
 
     numHandles = *(packet+sizeof(struct chat_header));
@@ -232,7 +235,7 @@ void printListPackets(int socketNum){
         if(flag == 12){
             printf(" %.*s\n", handLen, packet+4);
         }
-        
+
     }
 
 }
@@ -258,12 +261,12 @@ void exitProcess(int socketNum, fd_set* fileSet){
     uint8_t flag;
     uint16_t pduLen = sizeof(struct chat_header);
     flag = 8;
-    
+
     memcpy(packet, &flag, sizeof(uint8_t));
     memcpy(packet+sizeof(uint8_t), &pduLen, sizeof(uint16_t));
     sendToServer(socketNum, packet, sizeof(struct chat_header));
 
-    
+
     while(flag != 9){
         if(FD_ISSET(socketNum, fileSet)){
             recvFromServer(socketNum, packet);
@@ -284,7 +287,7 @@ void inputType(char inType, char* input, int socketNum, char* handle, fd_set *fi
         listProcess(socketNum);
 
     } else if(inType == 'E' || inType == 'e'){
-        exitProcess(socketNum, fileSet);        
+        exitProcess(socketNum, fileSet);
 
     } else {
         printf("Invalid command\n");
@@ -337,7 +340,7 @@ uint16_t skipDestHandles(int numHandles, uint8_t* packet, uint16_t off){
     return off;
 }
 
-void rcvMessage(uint8_t* packet){ 
+void rcvMessage(uint8_t* packet){
     uint8_t numHandles;
     uint16_t pduLen;
     uint16_t off = 0;
@@ -355,8 +358,8 @@ void rcvMessage(uint8_t* packet){
 
     numHandles = *(packet+off);
     off += sizeof(uint8_t);
-   
-    
+
+
     int i;
     uint8_t handleLen = 0;
     for(i = 0; i < numHandles; i++){
@@ -365,10 +368,10 @@ void rcvMessage(uint8_t* packet){
     }
 
     textLen = pduLen - off;
-       
+
     printf("\n%.*s: ", senderHandLen, handle);
-    printf("%.*s", textLen, packet+off); 
-    
+    printf("%.*s", textLen, packet+off);
+
 }
 
 void rcvBroadcast(uint8_t* packet){
@@ -390,16 +393,16 @@ void rcvBroadcast(uint8_t* packet){
 
     txtSize = pduLen - c_handLen - sizeof(struct chat_header) - sizeof(uint8_t);
     printf("\n%.*s: ", c_handLen, clientName);
-    printf("%.*s", txtSize, packet+off); 
+    printf("%.*s", txtSize, packet+off);
 }
 
 void rcvError(uint8_t* packet){
     uint8_t handLen;
     uint16_t pduLen;
     uint8_t off = sizeof(struct chat_header) + 1;
-    pduLen = *(packet); 
+    pduLen = *(packet);
     handLen = pduLen - sizeof(struct chat_header) - sizeof(uint8_t);
-    printf("\nClient with handle %.*s does not exist\n", handLen, packet+off); 
+    printf("\nClient with handle %.*s does not exist\n", handLen, packet+off);
 
 }
 
@@ -412,7 +415,7 @@ void getPacket(int socketNum){
 
     if(head->flag == 5){
         //Message Packet recieved
-        rcvMessage(packet); 
+        rcvMessage(packet);
     } else if(head->flag == 4){
         //Broadcast Packet received
         rcvBroadcast(packet);
@@ -459,15 +462,15 @@ int sendInitPacket(int socketNum, char* handle){
         perror("send call");
         exit(-1);
     }
-    return sent; 
+    return sent;
 }
 
 void initProcess(int socketNum, char* handle)
 {
     sendInitPacket(socketNum, handle);
     //Get the response packet and check it's flag.
-    initResponse(socketNum, handle); 
- 
+    initResponse(socketNum, handle);
+
 }
 
 void checkArgs(int argc, char * argv[])
@@ -482,7 +485,7 @@ void checkArgs(int argc, char * argv[])
 
 int recvFromServer(int socketNum, uint8_t *buffer){
 	int messageLen = 0;
-	
+
 	//now get the data from the client socket
 	if ((messageLen = recv(socketNum, buffer, MAXBUF, 0)) < 0)
 	{
@@ -502,4 +505,3 @@ void sendToServer(int socketNum, uint8_t* packet, int sendLen)
 		exit(-1);
         }
 }
-

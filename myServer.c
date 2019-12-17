@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
 
 	//create the server socket
 	serverSocket = tcpServerSetup(portNumber);
-        serviceClients(serverSocket);
+  serviceClients(serverSocket);
 
 	return 0;
 }
