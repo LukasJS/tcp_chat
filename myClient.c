@@ -424,7 +424,7 @@ void getPacket(int socketNum){
 
     recvFromServer(socketNum, packet);
     struct chat_header *head = (struct chat_header*)packet;
-
+    printf("GetPacket\n");
     if(head->flag == 5){
         //Message Packet recieved
         rcvMessage(packet);
