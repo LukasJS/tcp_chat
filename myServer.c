@@ -241,6 +241,7 @@ void sendListHandles(int clientSocket, int index, uint8_t* clientHandle){
 		memcpy(packet+sizeof(struct chat_header), &handleLen, sizeof(uint8_t));
 		memcpy(packet+sizeof(struct chat_header)+sizeof(uint8_t), client_table[index].h_buff, handleLen);
     sent = send(clientSocket, packet, head->pduLen, 0);
+		printf("Amount sent: %d\n", sent);
     if(sent < 0){
         perror("send call");
         exit(-1);
