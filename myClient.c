@@ -230,7 +230,8 @@ void printListPackets(int socketNum){
     int count;
 	  for(count = 0; count < numHandles; count++) {
         //recv(socketNum, packet, MAXBUF, MSG_DONTWAIT);
-        recv(socketNum, packet, MAXBUF, 0);
+        printf("Number of clients: %d\n", numHandles);
+        recv(socketNum, packet, MAXBUF, MSG_WAITALL);
         flag = *(packet+sizeof(uint16_t));
         handLen = *(packet+sizeof(struct chat_header));
         printf("%d %.*s\n", count, handLen, packet+4);
