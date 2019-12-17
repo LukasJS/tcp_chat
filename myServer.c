@@ -31,6 +31,9 @@ void initSetup(uint8_t *packet, int clientSocket);
 void checkNewClient(int serverSocket, int *numSocket, fd_set* temp_sock_set);
 void serviceClients(int serverSocket);
 int getSockNum(uint8_t* handle, uint8_t d_handLen);
+void sendListAmount(int clientSocket);
+void sendListDone(int clientSocket);
+void sendListHandles(int clientSocket, int index, uint8_t* clientHandle);
 
 /* Global Variables */
 int numHandles = 0;
@@ -214,7 +217,7 @@ void sendListHandles(int clientSocket, int index, uint8_t* clientHandle){
 		char* handle = (char*)clientHandle;
 
 		uint8_t packet[MAXBUF];
-		int send;
+		int sent;
 		uint8_t handleLen;
 
 		struct chat_header *head = (struct chat_header*)packet;
@@ -234,7 +237,7 @@ void sendListHandles(int clientSocket, int index, uint8_t* clientHandle){
 
 void sendListAmount(int clientSocket){
 		uint8_t packet[MAXBUF];
-		int send;
+		int sent;
 
 		//Send flag = 11 packet
     struct chat_header *head = (struct chat_header*)packet;
@@ -251,7 +254,7 @@ void sendListAmount(int clientSocket){
 
 void sendListDone(int clientSocket){
 		uint8_t packet[MAXBUF];
-		int send;
+		int sent;
 
 		//Send done packet
     struct chat_header *head = (struct chat_header*)packet;
