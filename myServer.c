@@ -178,6 +178,7 @@ int getSockNum(uint8_t* handle, uint8_t d_handLen){
     int i;
     for(i = 0; i < 100; i++){
         int len = strlen((char*)client_table[i].h_buff);
+				printf("List Handle Len: %d\n", len);
         if((memcmp(client_table[i].h_buff, handle, d_handLen) == 0) && (d_handLen == len)){
             return i;
         }
@@ -224,7 +225,7 @@ void sendListHandles(int clientSocket, int index, uint8_t* clientHandle){
 		head->flag = 12;
 		handleLen = (uint8_t) strlen(handle);
 		printf("List Handle Len: %d\n", handleLen);
-		printf("List Handle: %c\n", handle);
+		printf("List Handle: %s\n", handle);
 		head->pduLen = sizeof(struct chat_header) + sizeof(uint8_t) + handleLen;
 
 		memcpy(packet+sizeof(struct chat_header), &handleLen, sizeof(uint8_t));
