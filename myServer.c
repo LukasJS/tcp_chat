@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
 	int serverSocket = 0;   //socket descriptor for the server socket
 	int portNumber = 0;
 	client_table = (struct handleBuff*) malloc(10*sizeof(struct handleBuff));
-	initTable();
+	//initTable();
 	portNumber = checkArgs(argc, argv);
 
 	//create the server socket
