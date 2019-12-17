@@ -224,7 +224,7 @@ void printListPackets(int socketNum, uint8_t* packet){
     while(flag == 12){
         recv(socketNum, packet, MAXBUF, MSG_DONTWAIT);
         //printf("Count: %d\n", count);
-        recvFromServer(socketNum, packet);
+        //recvFromServer(socketNum, packet);
         flag = *(packet+sizeof(uint16_t));
         handLen = *(packet+sizeof(struct chat_header));
         printf("%d %.*s\n", count, handLen, packet+4);
