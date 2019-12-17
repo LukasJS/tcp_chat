@@ -227,7 +227,17 @@ void printListPackets(int socketNum){
 
     printf("Number of clients: %d\n", numHandles);
     flag = 12;
-    while(flag == 12){
+    int count;
+	  for(count = 0; count < numHandles; count++) {
+        //recv(socketNum, packet, MAXBUF, MSG_DONTWAIT);
+        recv(socketNum, packet, MAXBUF, 0);
+        flag = *(packet+sizeof(uint16_t));
+        handLen = *(packet+sizeof(struct chat_header));
+        if(flag == 12){
+            printf(" %.*s\n", handLen, packet+4);
+        }
+    }
+    /*while(flag == 12){
         //recv(socketNum, packet, MAXBUF, MSG_DONTWAIT);
         recv(socketNum, packet, MAXBUF, MSG_WAITALL);
         flag = *(packet+sizeof(uint16_t));
@@ -236,7 +246,7 @@ void printListPackets(int socketNum){
             printf(" %.*s\n", handLen, packet+4);
         }
 
-    }
+    }*/
 
 }
 
