@@ -372,7 +372,7 @@ void recvFromClient(int clientSocket)
 		if(messageLen == 0) {
 				exitClient(clientSocket);
 		} else {
-        flag = packetType(buf);
+        flag = *(buf+sizeof(uint16_t));
 				printf("Flag Recieved: %d\n", flag);
         if(flag == 1){
             //INIT
