@@ -332,7 +332,7 @@ void userInput(int socketNum, char* handle){
         fflush(stdout);
         FD_SET(socketNum, &fileSet);
         FD_SET(STDIN_FILENO, &fileSet);
-        if(select(socketNum+1, &fileSet, NULL, NULL, NULL) < 0){
+        if(select(socketNum, &fileSet, NULL, NULL, NULL) < 0){
             perror("select call");
             exit(-1);
         }
@@ -507,7 +507,7 @@ int recvFromServer(int socketNum, uint8_t *buffer){
 		perror("recv call");
 		exit(-1);
 	}
-        return messageLen;
+      return messageLen;
 }
 
 void sendToServer(int socketNum, uint8_t* packet, int sendLen)
