@@ -178,6 +178,7 @@ int getSockNum(uint8_t* handle, uint8_t d_handLen){
     int i;
     for(i = 0; i < 100; i++){
         int len = strlen((char*)client_table[i].h_buff);
+				printf("List Handle Len: %d\n", len);
         if((memcmp(client_table[i].h_buff, handle, d_handLen) == 0) && (d_handLen == len)){
             return i;
         }
