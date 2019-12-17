@@ -223,7 +223,7 @@ void printListPackets(int socketNum){
         i++;
     }
 
-    numHandles = *(packet+sizeof(struct chat_header));
+    //numHandles = *(packet+sizeof(struct chat_header));
 
     printf("Number of clients: %d\n", numHandles);
     flag = 12;
