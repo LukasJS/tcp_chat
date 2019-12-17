@@ -222,7 +222,7 @@ void printListPackets(int socketNum, uint8_t* packet){
 	  //for(count = 0; count < numHandles; count++) {
     flag = 12;
     while(flag == 12){
-        //recv(socketNum, packet, MAXBUF, 0);
+        recv(socketNum, packet, MAXBUF, MSG_DONTWAIT);
         //printf("Count: %d\n", count);
         recvFromServer(socketNum, packet);
         flag = *(packet+sizeof(uint16_t));

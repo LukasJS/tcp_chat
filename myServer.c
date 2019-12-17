@@ -219,7 +219,7 @@ void listResponse(int clientSocket){
 			if((uint8_t)client_table[index].h_buff[0] != 0){
 					sendListHandles(clientSocket, index, client_table[index].h_buff);
 					handles_sent++;
-					printf("handles_sent: %d\n", handles_sent);
+					printf("handles_sent: %d\n\n", handles_sent);
 			}
 		}
 		sendListDone(clientSocket);
