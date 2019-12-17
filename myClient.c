@@ -217,18 +217,18 @@ void printListPackets(int socketNum){
     recvFromServer(socketNum, packet);
     numHandles = *(packet+sizeof(struct chat_header));
     flag = *(packet+sizeof(uint16_t));
-    while(i <= numHandles){
+    /*while(flag == 11){
         recv(socketNum, packet, MAXBUF, MSG_DONTWAIT);
-        //flag = *(packet+sizeof(uint16_t));
-        i++;
-    }
+        flag = *(packet+sizeof(uint16_t));
+        //i++;
+    }*/
 
     //numHandles = *(packet+sizeof(struct chat_header));
 
     printf("Number of clients: %d\n", numHandles);
     flag = 12;
     while(flag == 12){
-        recvFromServer(socketNum, packet);
+        recv(socketNum, packet, MAXBUF, MSG_DONTWAIT);
         //recv(socketNum, packet, MAXBUF, MSG_WAITALL);
         flag = *(packet+sizeof(uint16_t));
         handLen = *(packet+sizeof(struct chat_header));
