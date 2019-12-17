@@ -339,6 +339,7 @@ void exitResponse(int clientSocket){
 
     //memcpy(client_table[clientSocket].h_buff, "\0", 100);
     sent = send(clientSocket, packet, sizeof(struct chat_header), 0);
+		printf("Sent: %d\n", sent);
     if(sent < 0){
         perror("good packet send call");
         exit(-1);
