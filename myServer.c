@@ -68,7 +68,7 @@ void initTable(){
 void checkNewClient(int serverSocket, int *numSocket, fd_set* temp_sock_set){
    int clientSocket;
    if(FD_ISSET(serverSocket, temp_sock_set)){
-       if((clientSocket = accept(serverSocket, NULL, NULL)) < 0){
+       if((clientSocket = tcpAccept(serverSocket, NULL, NULL)) < 0){
            perror("Accept call");
            exit(-1);
        }
@@ -212,13 +212,14 @@ void forwardBrod(uint8_t* buf, int clientSocket){
 
 void listResponse(int clientSocket){
 		int index;
-
+		int handles_sent = 0;
 		sendListAmount(clientSocket);
 
 		for(index = 0; index < 100; index++){
 			printf("List Handle: %s\n", (char*)client_table[index].h_buff);
 			if((uint8_t)client_table[index].h_buff[0] != 0){
 					sendListHandles(clientSocket, index, client_table[index].h_buff);
+					handles_sent++;
 			}
 		}
 		sendListDone(clientSocket);
