@@ -231,7 +231,7 @@ void printListPackets(int socketNum){
 	  for(count = 0; count < numHandles; count++) {
         //recv(socketNum, packet, MAXBUF, MSG_DONTWAIT);
         printf("Number of clients: %d\n", numHandles);
-        recv(socketNum, packet, MAXBUF, MSG_WAITALL);
+        recv(socketNum, packet, MAXBUF, 0);
         flag = *(packet+sizeof(uint16_t));
         handLen = *(packet+sizeof(struct chat_header));
         printf("%d %.*s\n", count, handLen, packet+4);

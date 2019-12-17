@@ -38,7 +38,7 @@ void initTable(void);
 
 /* Global Variables */
 int numHandles = 0;
-int maxClientSocket = 0;
+int maxClientSocket = 4;
 fd_set socket_set;
 struct handleBuff *client_table;
 
@@ -215,8 +215,7 @@ void listResponse(int clientSocket){
 		int handles_sent = 0;
 		sendListAmount(clientSocket);
 
-		for(index = 0; index < 100; index++){
-
+		for(index = 4; index < maxClientSocket; index++){
 			if((uint8_t)client_table[index].h_buff[0] != 0){
 					sendListHandles(clientSocket, index, client_table[index].h_buff);
 					handles_sent++;
