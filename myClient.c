@@ -40,6 +40,7 @@ void inputType(char inType, char* input, int socketNum, char* handle, fd_set* fi
 void getPacket(int socketNum);
 uint8_t messagePacket(uint16_t pduLen, uint8_t totHandles, uint8_t* handLengths, char** handlesArr, char* token, char* handle, uint8_t* packet);
 void printListPackets(int socketNum, uint8_t* packet);
+void rcvExit(int socketNum);
 
 int main(int argc, char * argv[])
 {
@@ -272,14 +273,14 @@ void exitProcess(int socketNum, fd_set* fileSet){
     memcpy(packet+sizeof(uint8_t), &pduLen, sizeof(uint16_t));
     sendToServer(socketNum, packet, sizeof(struct chat_header));
 
-
+/*
     while(flag != 9){
         if(FD_ISSET(socketNum, fileSet)){
             recvFromServer(socketNum, packet);
             flag = *(packet+sizeof(uint16_t));
         }
     }
-    exit(0);
+    exit(0);*/
 }
 
 void inputType(char inType, char* input, int socketNum, char* handle, fd_set *fileSet){
@@ -412,6 +413,11 @@ void rcvError(uint8_t* packet){
 
 }
 
+void rcvExit(int socketNum){
+    //Flag already checked.Just exit.
+    close(socketNum);
+    exit(0);
+}
 
 void getPacket(int socketNum){
     uint8_t packet[MAXBUF];
@@ -428,6 +434,9 @@ void getPacket(int socketNum){
     } else if(head->flag == 7){
         //Error Packet recieved
         rcvError(packet);
+    } else if(head->flag == 9){
+        //Error Packet recieved
+        rcvExit(socketNum);
     } else if(head->flag == 11){
         printListPackets(socketNum, packet);
     } else {
