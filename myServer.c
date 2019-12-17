@@ -215,17 +215,15 @@ void listResponse(int clientSocket){
 }
 
 void sendListHandles(int clientSocket, int index, uint8_t* clientHandle){
-		char* handle = (char*)clientHandle;
-
 		uint8_t packet[MAXBUF];
 		int sent;
-		uint8_t handleLen;
+		int handleLen;
 
 		struct chat_header *head = (struct chat_header*)packet;
 		head->flag = 12;
-		handleLen = (uint8_t) strlen(handle);
+		handlelen = strlen((char*)client_table[i].h_buff);
 		printf("List Handle Len: %d\n", handleLen);
-		printf("List Handle: %s\n", handle);
+		printf("List Handle: %s\n", clientHandle);
 		head->pduLen = sizeof(struct chat_header) + sizeof(uint8_t) + handleLen;
 
 		memcpy(packet+sizeof(struct chat_header), &handleLen, sizeof(uint8_t));
