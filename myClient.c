@@ -218,7 +218,7 @@ void printListPackets(int socketNum){
     numHandles = *(packet+sizeof(struct chat_header));
     flag = *(packet+sizeof(uint16_t));
     while(i < numHandles){
-        recv(socketNum, packet, MAXBUF, MSG_WAITALL);
+        recv(socketNum, packet, MAXBUF, MSG_DONTWAIT);
         //flag = *(packet+sizeof(uint16_t));
         i++;
     }
