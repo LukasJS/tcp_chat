@@ -39,7 +39,7 @@ void messageProcess(int socket_num, char* input, char* handle);
 void inputType(char inType, char* input, int socketNum, char* handle, fd_set* fileSet);
 void getPacket(int socketNum);
 uint8_t messagePacket(uint16_t pduLen, uint8_t totHandles, uint8_t* handLengths, char** handlesArr, char* token, char* handle, uint8_t* packet);
-void printListPackets(uint8_t* packet);
+void printListPackets(int socketNum, uint8_t* packet);
 
 int main(int argc, char * argv[])
 {
@@ -208,7 +208,7 @@ void broadProcess(int socketNum, char* input, char* handle){
     sendToServer(socketNum, packet, pduLen);
 }
 
-void printListPackets(uint8_t* packet){
+void printListPackets(int socketNum, uint8_t* packet){
     //uint8_t packet[MAXBUF];
     uint8_t flag = 0;
     uint16_t numHandles;
@@ -434,6 +434,8 @@ void getPacket(int socketNum){
     } else if(head->flag == 7){
         //Error Packet recieved
         rcvError(packet);
+    } else if(head->flag == 11){
+        printListPackets(packet);
     } else {
         printf("Server Terminated\n");
     }
