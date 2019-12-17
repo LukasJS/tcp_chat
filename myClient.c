@@ -209,27 +209,18 @@ void broadProcess(int socketNum, char* input, char* handle){
 }
 
 void printListPackets(int socketNum, uint8_t* packet){
-    //uint8_t packet[MAXBUF];
     uint8_t flag = 0;
     uint16_t numHandles;
     uint8_t handLen;
     int i = 0;
 
-    //recvFromServer(socketNum, packet);
     numHandles = *(packet+sizeof(struct chat_header));
     flag = *(packet+sizeof(uint16_t));
-    /*while(flag == 11){
-        recv(socketNum, packet, MAXBUF, MSG_DONTWAIT);
-        flag = *(packet+sizeof(uint16_t));
-        //i++;
-    }*/
-
-    //numHandles = *(packet+sizeof(struct chat_header));
 
     printf("Number of clients: %d\n", numHandles);
     int count;
-	  for(count = 0; count < numHandles; count++) {
-        //recv(socketNum, packet, MAXBUF, MSG_DONTWAIT);
+	  //for(count = 0; count < numHandles; count++) {
+    while(flag == 12){
         //recv(socketNum, packet, MAXBUF, 0);
         printf("Count: %d\n", count);
         recvFromServer(socketNum, packet);
