@@ -269,8 +269,8 @@ void exitProcess(int socketNum, fd_set* fileSet){
     uint16_t pduLen = sizeof(struct chat_header);
     flag = 8;
 
-    memcpy(packet, &flag, sizeof(uint8_t));
-    memcpy(packet+sizeof(uint8_t), &pduLen, sizeof(uint16_t));
+    memcpy(packet+sizeof(uint16_t), &flag, sizeof(uint8_t));
+    memcpy(packet, &pduLen, sizeof(uint16_t));
     sendToServer(socketNum, packet, sizeof(struct chat_header));
 
 /*
