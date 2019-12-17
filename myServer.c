@@ -373,6 +373,7 @@ void recvFromClient(int clientSocket)
 				exitClient(clientSocket);
 		} else {
         flag = packetType(buf);
+				printf("Flag Recieved: %d\n", flag);
         if(flag == 1){
             //INIT
             initSetup(buf, clientSocket);
