@@ -39,6 +39,7 @@ void messageProcess(int socket_num, char* input, char* handle);
 void inputType(char inType, char* input, int socketNum, char* handle, fd_set* fileSet);
 void getPacket(int socketNum);
 uint8_t messagePacket(uint16_t pduLen, uint8_t totHandles, uint8_t* handLengths, char** handlesArr, char* token, char* handle, uint8_t* packet);
+void printListPackets(uint8_t* packet);
 
 int main(int argc, char * argv[])
 {
@@ -207,14 +208,14 @@ void broadProcess(int socketNum, char* input, char* handle){
     sendToServer(socketNum, packet, pduLen);
 }
 
-void printListPackets(int socketNum){
-    uint8_t packet[MAXBUF];
+void printListPackets(uint8_t* packet){
+    //uint8_t packet[MAXBUF];
     uint8_t flag = 0;
     uint16_t numHandles;
     uint8_t handLen;
     int i = 0;
 
-    recvFromServer(socketNum, packet);
+    //recvFromServer(socketNum, packet);
     numHandles = *(packet+sizeof(struct chat_header));
     flag = *(packet+sizeof(uint16_t));
     /*while(flag == 11){
@@ -226,7 +227,6 @@ void printListPackets(int socketNum){
     //numHandles = *(packet+sizeof(struct chat_header));
 
     printf("Number of clients: %d\n", numHandles);
-    flag = 12;
     int count;
 	  for(count = 0; count < numHandles; count++) {
         //recv(socketNum, packet, MAXBUF, MSG_DONTWAIT);
@@ -265,7 +265,7 @@ void listProcess(int socketNum){
 
     sendToServer(socketNum, packet, pduLen);
 
-    printListPackets(socketNum);
+    //printListPackets(socketNum);
 }
 
 void exitProcess(int socketNum, fd_set* fileSet){
