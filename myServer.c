@@ -110,7 +110,7 @@ void serviceClients(int serverSocket){
         //Check if the server socket needs to add a new client
         checkNewClient(serverSocket, &numSocket, &temp_sock_set);
 
-        for(loopSocket = 0; loopSocket < numSocket+1; loopSocket++){
+        for(loopSocket = 0; loopSocket < maxClientSocket+1; loopSocket++){
             if(loopSocket != serverSocket && FD_ISSET(loopSocket, &temp_sock_set)){
                 recvFromClient(loopSocket);
             }
@@ -368,6 +368,7 @@ void recvFromClient(int clientSocket)
 				perror("recv call");
 				exit(-1);
 		}
+		printf("Message Len Recieved: %d\n", messageLen);
 		if(messageLen == 0) {
 				exitClient(clientSocket);
 		} else {
