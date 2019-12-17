@@ -179,7 +179,6 @@ void forwardMsg(uint8_t* packet, int s_clientSocket){
             }
         }
     }
-
 }
 
 int getSockNum(uint8_t* handle, uint8_t d_handLen){
@@ -218,7 +217,9 @@ void listResponse(int clientSocket){
 
 		for(index = 0; index < 100; index++){
 			printf("List Handle: %s\n", (char*)client_table[index].h_buff);
-			sendListHandles(clientSocket, index, client_table[index].h_buff);
+			if((uint8_t)client_table[index].h_buff[0] != 0){
+					sendListHandles(clientSocket, index, client_table[index].h_buff);
+			}
 		}
 		sendListDone(clientSocket);
 }
