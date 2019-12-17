@@ -224,6 +224,7 @@ void sendListHandles(int clientSocket, int index, uint8_t* clientHandle){
 		head->flag = 12;
 		handleLen = (uint8_t) strlen(handle);
 		printf("List Handle Len: %d\n", handleLen);
+		printf("List Handle: %c\n", handle);
 		head->pduLen = sizeof(struct chat_header) + sizeof(uint8_t) + handleLen;
 
 		memcpy(packet+sizeof(struct chat_header), &handleLen, sizeof(uint8_t));
