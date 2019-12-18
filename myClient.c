@@ -201,7 +201,7 @@ void broadProcess(int socketNum, char* input, char* handle){
     strtok(input, " ");
     token = strtok(NULL, "\0");
     if(token == NULL){
-        token == "";
+        token = "";
     }
     memcpy(packet+off, token, strlen(token));
 
