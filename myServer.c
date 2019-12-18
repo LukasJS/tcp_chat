@@ -345,8 +345,7 @@ void exitResponse(int clientSocket){
         perror("good packet send call");
         exit(-1);
     }
-
-
+		exitClient(clientSocket);
 }
 
 void exitClient(int clientSocket){
