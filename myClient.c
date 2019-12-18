@@ -201,7 +201,7 @@ void broadProcess(int socketNum, char* input, char* handle){
     token = strtok(input, " ");
     if(token == NULL){
        printf("Invalid command\n");
-       return;
+       //return;
     }
     token = strtok(NULL, "\0");
 
