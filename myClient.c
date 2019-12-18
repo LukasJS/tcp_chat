@@ -189,14 +189,6 @@ void broadProcess(int socketNum, char* input, char* handle){
     uint16_t pduLen;
     uint8_t flag = 4;
 
-    token = parseInput(input);
-    totHandles = atoi(token);
-    pduLen += sizeof(uint8_t);
-    if(token == NULL){
-       printf("Invalid command\n");
-       return;
-    }
-
     uint8_t c_handLen = strlen(handle);
     off+= sizeof(struct chat_header);
 
@@ -242,17 +234,6 @@ void printListPackets(int socketNum, uint8_t* packet){
         }
         count++;
     }
-    /*while(flag == 12){
-        //recv(socketNum, packet, MAXBUF, MSG_DONTWAIT);
-        recv(socketNum, packet, MAXBUF, MSG_WAITALL);
-        flag = *(packet+sizeof(uint16_t));
-        handLen = *(packet+sizeof(struct chat_header));
-        if(flag == 12){
-            printf(" %.*s\n", handLen, packet+4);
-        }
-
-    }*/
-
 }
 
 void listProcess(int socketNum){
@@ -280,15 +261,6 @@ void exitProcess(int socketNum, fd_set* fileSet){
     memcpy(packet+sizeof(uint16_t), &flag, sizeof(uint8_t));
     memcpy(packet, &pduLen, sizeof(uint16_t));
     sendToServer(socketNum, packet, sizeof(struct chat_header));
-
-/*
-    while(flag != 9){
-        if(FD_ISSET(socketNum, fileSet)){
-            recvFromServer(socketNum, packet);
-            flag = *(packet+sizeof(uint16_t));
-        }
-    }
-    exit(0);*/
 }
 
 void inputType(char inType, char* input, int socketNum, char* handle, fd_set *fileSet){
