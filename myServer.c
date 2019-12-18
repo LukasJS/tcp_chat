@@ -371,7 +371,7 @@ void recvFromClient(int clientSocket)
 		}
 		//printf("Message Len Recieved: %d\n", messageLen);
 		if(messageLen == 0) {
-				exitClient(clientSocket);
+				//exitClient(clientSocket);
 		} else {
         flag = *(buf+sizeof(uint16_t));
 				printf("Flag Recieved: %d\n", flag);
