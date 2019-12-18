@@ -213,17 +213,16 @@ void printListPackets(int socketNum, uint8_t* packet){
     uint8_t flag = 0;
     uint16_t numHandles;
     uint8_t handLen;
-    int i = 0;
 
     numHandles = *(packet+sizeof(struct chat_header));
     flag = *(packet+sizeof(uint16_t));
 
     printf("Number of clients: %d\n", numHandles);
-    int count;
+    int count = 0;
 	  //for(count = 0; count < numHandles; count++) {
     flag = 12;
     while(flag == 12){
-        printf("RECV Return: %d\n", recv(socketNum, packet, MAXBUF, 0));
+        printf("RECV Return: %d\n", (int)recv(socketNum, packet, MAXBUF, 0));
         //printf("Count: %d\n", count);
         //recvFromServer(socketNum, packet);
         printf("Flag: %d\n", flag);
@@ -233,6 +232,7 @@ void printListPackets(int socketNum, uint8_t* packet){
         if(flag == 12){
             printf(" %.*s\n", handLen, packet+4);
         }
+        count++;
     }
     /*while(flag == 12){
         //recv(socketNum, packet, MAXBUF, MSG_DONTWAIT);
