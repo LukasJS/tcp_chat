@@ -200,6 +200,9 @@ void broadProcess(int socketNum, char* input, char* handle){
 
     strtok(input, " ");
     token = strtok(NULL, "\0");
+    if(token == NULL){
+        token == "";
+    }
     memcpy(packet+off, token, strlen(token));
 
     pduLen = sizeof(struct chat_header) + sizeof(uint8_t) + c_handLen + strlen(token);
