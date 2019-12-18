@@ -361,7 +361,7 @@ void recvFromClient(int clientSocket)
 
 		int flag;
 		uint8_t buf[MAXBUF];
-		int messageLen = 0;
+		int messageLen = 1;
 
 		//now get the data from the client socket
 		if ((messageLen = recv(clientSocket, buf, MAXBUF, 0)) < 0)
