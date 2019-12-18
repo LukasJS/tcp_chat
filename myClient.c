@@ -189,6 +189,8 @@ void broadProcess(int socketNum, char* input, char* handle){
     uint16_t pduLen;
     uint8_t flag = 4;
 
+
+    token = strtok(input, " ");
     //token = parseInput(input);
     //totHandles = atoi(token);
     //pduLen += sizeof(uint8_t);
