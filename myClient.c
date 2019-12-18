@@ -198,12 +198,13 @@ void broadProcess(int socketNum, char* input, char* handle){
     memcpy(packet+off, handle, c_handLen);
     off += c_handLen;
 
-    strtok(input, " ");
-    token = strtok(NULL, "\0");
+    token = strtok(input, " ");
     if(token == NULL){
        printf("Invalid command\n");
        return;
     }
+    token = strtok(NULL, "\0");
+
     memcpy(packet+off, token, strlen(token));
 
     pduLen = sizeof(struct chat_header) + sizeof(uint8_t) + c_handLen + strlen(token);
