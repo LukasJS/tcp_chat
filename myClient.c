@@ -228,10 +228,10 @@ void printListPackets(int socketNum, uint8_t* packet){
         printf("RECV Return: %d\n", (int)recv(socketNum, packet, MAXBUF, 0));
         //printf("Count: %d\n", count);
         //recvFromServer(socketNum, packet);
-        printf("Flag: %d\n", flag);
+        printf("Flag: %d", flag);
         flag = *(packet+sizeof(uint16_t));
         handLen = *(packet+sizeof(struct chat_header));
-        printf("%d %.*s\n", count, handLen, packet+4);
+        //printf("%d %.*s\n", count, handLen, packet+4);
         if(flag == 12){
             printf(" %.*s\n", handLen, packet+4);
         }
@@ -407,7 +407,6 @@ void getPacket(int socketNum){
 
     recvFromServer(socketNum, packet);
     struct chat_header *head = (struct chat_header*)packet;
-    printf("GetPacket\n");
     if(head->flag == 5){
         //Message Packet recieved
         rcvMessage(packet);

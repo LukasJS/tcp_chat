@@ -73,7 +73,7 @@ void checkNewClient(int serverSocket, int *numSocket, fd_set* temp_sock_set){
            perror("Accept call");
            exit(-1);
        }
-			 printf("ClientSocket: %d\n", clientSocket);
+
        if(clientSocket >= *numSocket){
            *numSocket = clientSocket + 1;
        }
@@ -186,7 +186,6 @@ int getSockNum(uint8_t* handle, uint8_t d_handLen){
     int i;
     for(i = 0; i < 100; i++){
         int len = strlen((char*)client_table[i].h_buff);
-				printf("sock Handle Len: %d\n", len);
         if((memcmp(client_table[i].h_buff, handle, d_handLen) == 0) && (d_handLen == len)){
             return i;
         }
@@ -283,53 +282,6 @@ void sendListDone(int clientSocket){
 }
 
 
-/*
-void listResponse(int clientSocket){
-    uint8_t packet[MAXBUF];
-    int sent;
-    uint8_t len;
-    int i;
-    //Send flag = 11 packet
-    struct chat_header *head = (struct chat_header*)packet;
-    head->flag = 11;
-    head->pduLen = sizeof(struct chat_header) + sizeof(uint8_t);
-
-    memcpy(packet+sizeof(struct chat_header), &numHandles, sizeof(uint8_t));
-    sent = send(clientSocket, packet, head->pduLen, 0);
-    if(sent < 0){
-        perror("send call");
-        exit(-1);
-    }
-
-    //Send a packet per handle known
-    for(i = 0; i < 100; i++){
-        head->flag = 12;
-        len = strlen((char*)client_table[i].h_buff);
-        head->pduLen = sizeof(struct chat_header) + sizeof(uint8_t) + len;
-
-        if((client_table[i].h_buff[0] > 20)) {
-
-            memcpy(packet+sizeof(struct chat_header), &len, sizeof(uint8_t));
-            memcpy(packet+sizeof(struct chat_header)+sizeof(uint8_t), client_table[i].h_buff, len);
-            sent = send(clientSocket, packet, head->pduLen, 0);
-            if(sent < 0){
-                perror("send call");
-                exit(-1);
-            }
-        }
-    }
-
-    //Send done packet
-    head->flag = 13;
-    head->pduLen = sizeof(struct chat_header);
-    sent = send(clientSocket, packet, head->pduLen, 0);
-    if(sent < 0){
-        perror("send call");
-         exit(-1);
-    }
-
-}
-*/
 void exitResponse(int clientSocket){
     uint8_t packet[MAXBUF];
     int sent;
@@ -338,9 +290,7 @@ void exitResponse(int clientSocket){
     head->flag = 9;
     head->pduLen = sizeof(struct chat_header);
 
-    //memcpy(client_table[clientSocket].h_buff, "\0", 100);
     sent = send(clientSocket, packet, sizeof(struct chat_header), 0);
-		printf("Sent: %d\n", sent);
     if(sent < 0){
         perror("good packet send call");
         exit(-1);
@@ -368,9 +318,9 @@ void recvFromClient(int clientSocket)
 				perror("recv call");
 				exit(-1);
 		}
-		//printf("Message Len Recieved: %d\n", messageLen);
+
 		if(messageLen == 0) {
-				//exitClient(clientSocket);
+
 		} else {
         flag = *(buf+sizeof(uint16_t));
 				printf("Flag Recieved: %d\n", flag);
@@ -451,12 +401,11 @@ void initSetup(uint8_t *packet, int clientSocket){
         //Check and realloc dynamic table
         if((numHandles % 10) == 0){
             client_table = realloc(client_table, sizeof(struct handleBuff)*(numHandles + 10));
-						printf("Increase client_table size.\n");
         }
         memcpy(client_table[clientSocket].h_buff, client_handle, sizeof(uint8_t)*100);
         numHandles++;
 				maxClientSocket++;
-				printf("Incerment Handle and Socket: %d\n", numHandles);
+
         //Send success packet flag = 2
         sendResponse(clientSocket, 2);
     } else {
