@@ -457,7 +457,7 @@ void initSetup(uint8_t *packet, int clientSocket){
         memcpy(client_table[clientSocket].h_buff, client_handle, sizeof(uint8_t)*100);
         numHandles++;
 				maxClientSocket++;
-				printf("Incerment Handle and Socket: %d\n", numHandles);
+				printf("Incerment Handle and Socket: %d\n", maxClientSocket);
         //Send success packet flag = 2
         sendResponse(clientSocket, 2);
     } else {
