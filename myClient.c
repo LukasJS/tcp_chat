@@ -230,10 +230,14 @@ void printListPackets(int socketNum, uint8_t* packet){
 
     printf("Number of clients: %d\n", numHandles);
     int count = 0;
-	  //for(count = 0; count < numHandles; count++) {
-    flag = 12;
-    while(flag == 12){
+	  for(count = 0; count < numHandles; count++) {
+    //flag = 12;
+    //while(flag == 12){
+        printf("PacketLen recv\n");
         recv(socketNum, packetLen, 2, MSG_PEEK);
+        if(packetLen == 3){
+            return;
+        }
         uint8_t packetBuf[(size_t)*packetLen];
         printf("packetLen Recieved: %d\n", (int)*packetLen);
         printf("RECV Return: %d\n", (int)recv(socketNum, packetBuf, (size_t)packetLen, 0));
@@ -245,7 +249,6 @@ void printListPackets(int socketNum, uint8_t* packet){
         if(flag == 12){
             printf(" %.*s\n", handLen, packetBuf+4);
         }
-        count++;
     }
 }
 
