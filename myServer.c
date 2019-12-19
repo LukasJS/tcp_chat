@@ -271,7 +271,6 @@ void sendListDone(int clientSocket){
     head->flag = 13;
     head->pduLen = sizeof(struct chat_header);
     sent = send(clientSocket, packet, head->pduLen, 0);
-		printf("Send List Done amount: %d\n", sent);
     if(sent < 0){
         perror("send call");
          exit(-1);
