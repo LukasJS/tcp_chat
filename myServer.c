@@ -215,7 +215,7 @@ void listResponse(int clientSocket){
 		int handles_sent = 0;
 		sendListAmount(clientSocket);
 
-		for(index = 4; index < maxClientSocket; index++){
+		for(index = 4; index < maxClientSocket+1; index++){
 			if((uint8_t)client_table[index].h_buff[0] != 0){
 					sendListHandles(clientSocket, index, client_table[index].h_buff);
 					handles_sent++;

@@ -235,9 +235,7 @@ void printListPackets(int socketNum, uint8_t* packet){
     //while(flag == 12){
         //printf("PacketLen recv\n");
         recv(socketNum, packetLen, 2, MSG_PEEK);
-        if(packetLen == 3){
-            return;
-        }
+
         uint8_t packetBuf[(size_t)*packetLen];
         printf("packetLen Recieved: %d\n", (int)*packetLen);
         printf("RECV Return: %d\n", (int)recv(socketNum, packetBuf, (size_t)packetLen, 0));
