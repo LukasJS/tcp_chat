@@ -248,6 +248,11 @@ void printListPackets(int socketNum, uint8_t* packet){
             printf(" %.*s\n", handLen, packetBuf+4);
         }
     }
+    recv(socketNum, packet, MAXBUF, 0);
+    flag = *(packetBuf+sizeof(uint16_t));
+    printf("Flag: %d", flag);
+
+
 }
 
 void listProcess(int socketNum){
