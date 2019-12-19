@@ -319,7 +319,6 @@ void recvFromClient(int clientSocket)
 
 		} else {
         flag = *(buf+sizeof(uint16_t));
-				printf("Flag Recieved: %d\n", flag);
         if(flag == 1){
             //INIT
             initSetup(buf, clientSocket);

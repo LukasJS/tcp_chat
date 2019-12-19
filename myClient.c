@@ -224,7 +224,7 @@ void printListPackets(int socketNum, uint8_t* packet){
     uint16_t numHandles;
     uint8_t handLen;
     uint8_t packetLen[2];
-
+    printf("\n");
     numHandles = *(packet+sizeof(struct chat_header));
     flag = *(packet+sizeof(uint16_t));
 
@@ -311,8 +311,8 @@ void userInput(int socketNum, char* handle){
     fd_set fileSet;
 
     while(1){
-        printf("$: ");
-        fflush(stdout);
+        //printf("$: ");
+        //fflush(stdout);
         FD_SET(socketNum, &fileSet);
         FD_SET(STDIN_FILENO, &fileSet);
         if(select(socketNum+1, &fileSet, NULL, NULL, NULL) < 0){
