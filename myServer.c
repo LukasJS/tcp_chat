@@ -219,7 +219,6 @@ void listResponse(int clientSocket){
 			if((uint8_t)client_table[index].h_buff[0] != 0){
 					sendListHandles(clientSocket, index, client_table[index].h_buff);
 					handles_sent++;
-					printf("handles_sent: %d\n\n", handles_sent);
 			}
 		}
 		sendListDone(clientSocket);
@@ -233,8 +232,6 @@ void sendListHandles(int clientSocket, int index, uint8_t* clientHandle){
 		struct chat_header *head = (struct chat_header*)packet;
 		head->flag = 12;
 		handleLen = strlen((char*)client_table[index].h_buff);
-		printf("List Handle: %s\n", (char*)client_table[index].h_buff);
-		printf("List Handle Len: %d\n", handleLen);
 
 		head->pduLen = sizeof(struct chat_header) + sizeof(uint8_t) + handleLen;
 
@@ -242,7 +239,6 @@ void sendListHandles(int clientSocket, int index, uint8_t* clientHandle){
 		memcpy(packet+sizeof(struct chat_header)+sizeof(uint8_t),
 	 			client_table[index].h_buff, handleLen);
     sent = send(clientSocket, packet, head->pduLen, 0);
-		printf("Amount sent: %d\n", sent);
     if(sent < 0){
         perror("send call");
         exit(-1);

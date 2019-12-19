@@ -228,31 +228,21 @@ void printListPackets(int socketNum, uint8_t* packet){
     numHandles = *(packet+sizeof(struct chat_header));
     flag = *(packet+sizeof(uint16_t));
 
-    printf("Number of clients: %d\n", numHandles);
+    //printf("Number of clients: %d\n", numHandles);
     int count = 0;
 	  for(count = 0; count < numHandles; count++) {
-    //flag = 12;
-    //while(flag == 12){
-        //printf("PacketLen recv\n");
-        printf("RECV Return Len: %d\n", (int)recv(socketNum, packetLen, 2, MSG_PEEK));
-
+        recv(socketNum, packetLen, 2, MSG_PEEK);
         uint8_t packetBuf[(size_t)*packetLen];
-        printf("packetLen Recieved: %d\n", (int)*packetLen);
-        printf("RECV Return: %d\n", (int)recv(socketNum, packetBuf, (size_t)*packetLen, 0));
+        recv(socketNum, packetBuf, (size_t)*packetLen, 0));
 
         flag = *(packetBuf+sizeof(uint16_t));
         handLen = *(packetBuf+sizeof(struct chat_header));
-        printf("Flag: %d", flag);
-        //printf("%d %.*s\n", count, handLen, packet+4);
         if(flag == 12){
             printf(" %.*s\n", handLen, packetBuf+4);
         }
     }
     recv(socketNum, packet, MAXBUF, 0);
     flag = *(packet+sizeof(uint16_t));
-    printf("Flag: %d", flag);
-
-
 }
 
 void listProcess(int socketNum){
