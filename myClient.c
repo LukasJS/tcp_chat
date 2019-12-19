@@ -238,12 +238,12 @@ void printListPackets(int socketNum, uint8_t* packet){
         printf("packetLen Recieved: %d\n", (int)*packetLen);
         printf("RECV Return: %d\n", (int)recv(socketNum, packetBuf, (size_t)packetLen, 0));
 
-        flag = *(packet+sizeof(uint16_t));
-        handLen = *(packet+sizeof(struct chat_header));
+        flag = *(packetBuf+sizeof(uint16_t));
+        handLen = *(packetBuf+sizeof(struct chat_header));
         printf("Flag: %d", flag);
         //printf("%d %.*s\n", count, handLen, packet+4);
         if(flag == 12){
-            printf(" %.*s\n", handLen, packet+4);
+            printf(" %.*s\n", handLen, packetBuf+4);
         }
         count++;
     }
