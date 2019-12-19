@@ -69,7 +69,7 @@ void initTable(){
 void checkNewClient(int serverSocket, int *numSocket, fd_set* temp_sock_set){
    int clientSocket;
    if(FD_ISSET(serverSocket, temp_sock_set)){
-       if((clientSocket = tcpAccept(serverSocket, 1)) < 0){
+       if((clientSocket = tcpAccept(serverSocket, 0)) < 0){
            perror("Accept call");
            exit(-1);
        }
