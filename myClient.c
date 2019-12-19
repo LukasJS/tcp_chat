@@ -233,7 +233,7 @@ void printListPackets(int socketNum, uint8_t* packet){
 	  for(count = 0; count < numHandles; count++) {
         recv(socketNum, packetLen, 2, MSG_PEEK);
         uint8_t packetBuf[(size_t)*packetLen];
-        recv(socketNum, packetBuf, (size_t)*packetLen, 0));
+        recv(socketNum, packetBuf, (size_t)*packetLen, 0);
 
         flag = *(packetBuf+sizeof(uint16_t));
         handLen = *(packetBuf+sizeof(struct chat_header));
