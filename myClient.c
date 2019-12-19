@@ -311,8 +311,8 @@ void userInput(int socketNum, char* handle){
     fd_set fileSet;
 
     while(1){
-        //printf("$: ");
-        //fflush(stdout);
+        printf("$: ");
+        fflush(stdout);
         FD_SET(socketNum, &fileSet);
         FD_SET(STDIN_FILENO, &fileSet);
         if(select(socketNum+1, &fileSet, NULL, NULL, NULL) < 0){
