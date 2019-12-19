@@ -249,7 +249,7 @@ void printListPackets(int socketNum, uint8_t* packet){
         }
     }
     recv(socketNum, packet, MAXBUF, 0);
-    flag = *(packetBuf+sizeof(uint16_t));
+    flag = *(packet+sizeof(uint16_t));
     printf("Flag: %d", flag);
 
 
