@@ -228,7 +228,6 @@ void printListPackets(int socketNum, uint8_t* packet){
     numHandles = *(packet+sizeof(struct chat_header));
     flag = *(packet+sizeof(uint16_t));
 
-    //printf("Number of clients: %d\n", numHandles);
     int count = 0;
 	  for(count = 0; count < numHandles; count++) {
         recv(socketNum, packetLen, 2, MSG_PEEK);
@@ -505,7 +504,6 @@ void sendToServer(int socketNum, uint8_t* packet, int sendLen)
 {
   int sent;
 	sent =  send(socketNum, packet, sendLen, 0);
-  printf("Sent from Client: %d\n", sent);
 	if (sent < 0)
 	{
 		perror("send call");
