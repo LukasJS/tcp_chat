@@ -239,7 +239,8 @@ void sendListHandles(int clientSocket, int index, uint8_t* clientHandle){
 		head->pduLen = sizeof(struct chat_header) + sizeof(uint8_t) + handleLen;
 
 		memcpy(packet+sizeof(struct chat_header), &handleLen, sizeof(uint8_t));
-		memcpy(packet+sizeof(struct chat_header)+sizeof(uint8_t), client_table[index].h_buff, handleLen);
+		memcpy(packet+sizeof(struct chat_header)+sizeof(uint8_t),
+	 			client_table[index].h_buff, handleLen);
     sent = send(clientSocket, packet, head->pduLen, 0);
 		printf("Amount sent: %d\n", sent);
     if(sent < 0){
@@ -368,7 +369,7 @@ int checkArgs(int argc, char *argv[])
 int checkHandle(uint8_t *client_handle, int handleLen){
     int loopHandle;
     for(loopHandle = 0; loopHandle < 100; loopHandle++){
-        if(memcmp(client_handle, client_table[loopHandle].h_buff, handleLen) == 0){
+       if(memcmp(client_handle, client_table[loopHandle].h_buff, handleLen) == 0){
             return 0;
         }
     }
@@ -400,9 +401,11 @@ void initSetup(uint8_t *packet, int clientSocket){
     if(checkHandle(client_handle, handleLen) == 1){
         //Check and realloc dynamic table
         if((numHandles % 10) == 0){
-            client_table = realloc(client_table, sizeof(struct handleBuff)*(numHandles + 10));
+            client_table =
+						realloc(client_table, sizeof(struct handleBuff)*(numHandles + 10));
         }
-        memcpy(client_table[clientSocket].h_buff, client_handle, sizeof(uint8_t)*100);
+        memcpy(client_table[clientSocket].h_buff,
+					 client_handle, sizeof(uint8_t)*100);
         numHandles++;
 				maxClientSocket++;
 
