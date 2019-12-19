@@ -233,7 +233,7 @@ void printListPackets(int socketNum, uint8_t* packet){
 	  for(count = 0; count < numHandles; count++) {
     //flag = 12;
     //while(flag == 12){
-        printf("PacketLen recv\n");
+        //printf("PacketLen recv\n");
         recv(socketNum, packetLen, 2, MSG_PEEK);
         if(packetLen == 3){
             return;
