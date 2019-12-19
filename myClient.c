@@ -224,7 +224,6 @@ void printListPackets(int socketNum, uint8_t* packet){
     uint16_t numHandles;
     uint8_t handLen;
     uint8_t packetLen[2];
-    //uint8_t listingTrack[100];
 
     numHandles = *(packet+sizeof(struct chat_header));
     flag = *(packet+sizeof(uint16_t));
@@ -235,12 +234,10 @@ void printListPackets(int socketNum, uint8_t* packet){
     flag = 12;
     while(flag == 12){
         recv(socketNum, packetLen, 2, MSG_PEEK);
-        //listingTrack += packetLen;
+        uint8_t packetBuf[(int)packetLen];
         printf("packetLen Recieved: %d\n", (int)*packetLen);
-        //printf("packetLen Recieved: %d\n", (int)*listingTrack);
-        printf("RECV Return: %d\n", (int)recv(socketNum, packet, (size_t)packetLen, MSG_TRUNC));
-        //printf("Count: %d\n", count);
-        //recvFromServer(socketNum, packet);
+        printf("RECV Return: %d\n", (int)recv(socketNum, packetBuf, (size_t)packetLen, 0));
+
         flag = *(packet+sizeof(uint16_t));
         handLen = *(packet+sizeof(struct chat_header));
         printf("Flag: %d", flag);
