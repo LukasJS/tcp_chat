@@ -238,7 +238,7 @@ void printListPackets(int socketNum, uint8_t* packet){
 
         uint8_t packetBuf[(size_t)*packetLen];
         printf("packetLen Recieved: %d\n", (int)*packetLen);
-        printf("RECV Return: %d\n", (int)recv(socketNum, packetBuf, (size_t)packetLen, 0));
+        printf("RECV Return: %d\n", (int)recv(socketNum, packetBuf, (size_t)*packetLen, 0));
 
         flag = *(packetBuf+sizeof(uint16_t));
         handLen = *(packetBuf+sizeof(struct chat_header));
